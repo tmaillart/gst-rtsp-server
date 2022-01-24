@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+/* BUILD with
+ * gcc $(pkg-config --cflags --libs gstreamer-1.0) $(pkg-config --cflags --libs gstreamer-rtsp-server-1.0) test-launch.c -o gst-rtsp-launch */
+
 #include <gst/gst.h>
 
 #include <gst/rtsp-server/rtsp-server.h>
