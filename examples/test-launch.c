@@ -21,13 +21,17 @@
 
 #include <gst/rtsp-server/rtsp-server.h>
 
-#define DEFAULT_RTSP_PORT "8554"
+#define DEFAULT_RTSP_PORT    "8554"
+#define DEFAULT_RTSP_ADDRESS "127.0.0.1"
 
 static char *port = (char *) DEFAULT_RTSP_PORT;
+static char *address = (char *) DEFAULT_RTSP_ADDRESS;
 
 static GOptionEntry entries[] = {
   {"port", 'p', 0, G_OPTION_ARG_STRING, &port,
       "Port to listen on (default: " DEFAULT_RTSP_PORT ")", "PORT"},
+  {"address", 'a', 0, G_OPTION_ARG_STRING, &address,
+      "Address to listen on (default: " DEFAULT_RTSP_ADDRESS ")", "ADDRESS"},
   {NULL}
 };
 
@@ -57,7 +61,10 @@ main (int argc, char *argv[])
 
   /* create a server instance */
   server = gst_rtsp_server_new ();
-  g_object_set (server, "service", port, NULL);
+  g_object_set (server,
+      "address", address,
+      "service", port,
+      NULL);
 
   /* get the mount points for this server, every server has a default object
    * that be used to map uri mount points to media factories */
@@ -81,7 +88,7 @@ main (int argc, char *argv[])
   gst_rtsp_server_attach (server, NULL);
 
   /* start serving */
-  g_print ("stream ready at rtsp://127.0.0.1:%s/test\n", port);
+  g_print ("stream ready at rtsp://%s:%s/test\n", address, port);
   g_main_loop_run (loop);
 
   return 0;
